@@ -1,8 +1,25 @@
+/*
+ *    Copyright 2018 Qinglian.Zhang
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package com.zqlite.android.mockaweme.fragment.feed
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.os.Environment
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.GridLayoutManager
@@ -15,6 +32,7 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.tencent.rtmp.ITXVodPlayListener
 import com.tencent.rtmp.TXLiveConstants
+import com.tencent.rtmp.TXVodPlayConfig
 import com.tencent.rtmp.TXVodPlayer
 import com.tencent.rtmp.ui.TXCloudVideoView
 import com.zqlite.android.mockaweme.MockPlayingView
@@ -22,6 +40,7 @@ import com.zqlite.android.mockaweme.R
 import com.zqlite.android.mockaweme.base.BaseFragment
 import com.zqlite.android.mockaweme.entity.VideoEntity
 import kotlinx.android.synthetic.main.fragment_feeds.*
+import java.util.*
 
 /**
  * Created by scott on 2018/1/13.
@@ -33,8 +52,10 @@ class FeedsFragment : BaseFragment() {
     private var mVideoPageAdapter: VideoPagerAdapter? = null
     private var mPlayer: TXVodPlayer? = null
     private var mVideoView: TXCloudVideoView? = null
+    private var mCurrentMockPlayingView : MockPlayingView? = null
     private var mCurrentPagePosition = 0
     private var mRoomId = -1
+    private var mMockPlayingCallback : MockPlayingView.Callback? = null
 
     override fun getLayoutId(): Int {
         return R.layout.fragment_feeds
@@ -44,6 +65,7 @@ class FeedsFragment : BaseFragment() {
 
         mVideoView = TXCloudVideoView(context!!)
         mPlayer = TXVodPlayer(context!!)
+        videoLocaleCache()
         mFeedsAdapter = VideoAdapter()
         list.adapter = mFeedsAdapter
         val layoutManager = GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
@@ -67,28 +89,67 @@ class FeedsFragment : BaseFragment() {
                 attachVideoView(mCurrentPagePosition,page)
             }
         }
+
+
+        mMockPlayingCallback = object :MockPlayingView.Callback{
+            override fun onStart() {
+                mPlayer!!.resume()
+            }
+
+            override fun isPlaying(): Boolean {
+                return mPlayer!!.isPlaying
+            }
+
+            override fun onPause() {
+                mPlayer!!.pause()
+            }
+
+        }
+
         mViewModel = ViewModelProviders.of(this)[FeedsViewModel::class.java]
         mViewModel?.loadVideoList(context!!)?.observe(this, Observer<MutableList<VideoEntity>> {
             mFeedsAdapter?.update(it!!.toList())
             mVideoPageAdapter?.update(it!!.toList())
         })
+
     }
 
+    private fun videoLocaleCache() {
+//        val mConfig = TXVodPlayConfig()
+//        mConfig.setCacheFolderPath(
+//                Environment.getExternalStorageDirectory().path + "/MockAweme/.cache")
+//        mConfig.setMaxCacheItems(50)
+//        mPlayer!!.setConfig(mConfig)
+    }
     override fun onResume() {
         super.onResume()
-        mPlayer!!.resume()
+        resumePlay()
     }
 
     override fun onPause() {
         super.onPause()
-        mPlayer!!.pause()
+        pause()
 
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        stopPlay()
+    }
+
+    private fun resumePlay(){
+        mPlayer!!.resume()
+        mCurrentMockPlayingView?.startPlay()
+    }
+    private fun stopPlay(){
         mPlayer!!.stopPlay(true)
         mVideoView!!.onDestroy()
+    }
+
+    private fun pause(){
+        if(mPlayer!!.isPlaying){
+            mPlayer!!.pause()
+        }
     }
     private fun attachVideoView(position: Int,page:View){
         val container : FrameLayout = page.findViewById(R.id.container)
@@ -115,11 +176,9 @@ class FeedsFragment : BaseFragment() {
         mPlayer!!.setPlayerView(mVideoView)
         mPlayer!!.startPlay(videoEntity.videoUrl)
         mRoomId = position
+        mCurrentMockPlayingView = page as MockPlayingView
     }
 
-    private fun resumeMockPlayingView(page:View){
-
-    }
     companion object Instance {
         fun getInstance(args: Bundle?): FeedsFragment {
             val fragment = FeedsFragment()
@@ -202,7 +261,7 @@ class FeedsFragment : BaseFragment() {
         }
 
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
-            val mockPlayingView = MockPlayingView(context!!)
+            val mockPlayingView = MockPlayingView(context!!,mMockPlayingCallback!!)
             mockPlayingView.id = position
             container.addView(mockPlayingView)
             mockPlayingView.update(videoList[position])
