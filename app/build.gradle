@@ -75,4 +75,7 @@ dependencies {
 
     //volley
     implementation 'com.android.volley:volley:1.1.0'
+
+    //vertical viewpager
+    implementation 'com.github.castorflex.verticalviewpager:library:19.0.1'
 }
