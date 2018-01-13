@@ -1,0 +1,21 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!--沉浸式风格-->
+    <style name="ImmerseStyle" parent="Theme.AppCompat.NoActionBar">
+        <item name="windowNoTitle">true</item>
+    </style>
+    <!--沉浸式布局并且Window背景透明-->
+    <style name="SlideStyleWithImmerse" parent="@style/ImmerseStyle">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+</resources>
