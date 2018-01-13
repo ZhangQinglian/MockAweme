@@ -51,11 +51,23 @@ class HomeFragment : BaseFragment() {
     inner class HomePagerAdapter(fm:FragmentManager) : FragmentPagerAdapter(fm){
 
         private val fragments : MutableList<Fragment> = mutableListOf()
-
+        private val feedsFragment = FeedsFragment.getInstance(null)
+        private val cameraFragment = CameraFragment.getInstance(null)
+        private val profileFragment = ProfileFragment.getInstance(null)
         init {
-            fragments.add(CameraFragment.getInstance(null))
-            fragments.add(FeedsFragment.getInstance(null))
-            fragments.add(ProfileFragment.getInstance(null))
+            fragments.add(cameraFragment)
+            fragments.add(feedsFragment)
+            fragments.add(profileFragment)
+            feedsFragment.setCallback(object :FeedsFragment.Callback{
+                override fun startLoad() {
+                    bottom_navigation.startProgress()
+                }
+
+                override fun stopLoad() {
+                    bottom_navigation.stopProgress()
+                }
+
+            })
         }
 
         override fun getItem(position: Int): Fragment {

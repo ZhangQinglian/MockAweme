@@ -19,11 +19,11 @@ package com.zqlite.android.mockaweme.fragment.feed
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.os.Environment
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,20 +32,18 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.tencent.rtmp.ITXVodPlayListener
 import com.tencent.rtmp.TXLiveConstants
-import com.tencent.rtmp.TXVodPlayConfig
 import com.tencent.rtmp.TXVodPlayer
 import com.tencent.rtmp.ui.TXCloudVideoView
-import com.zqlite.android.mockaweme.MockPlayingView
+import com.zqlite.android.mockaweme.base.view.MockPlayingView
 import com.zqlite.android.mockaweme.R
 import com.zqlite.android.mockaweme.base.BaseFragment
 import com.zqlite.android.mockaweme.entity.VideoEntity
 import kotlinx.android.synthetic.main.fragment_feeds.*
-import java.util.*
 
 /**
  * Created by scott on 2018/1/13.
  */
-class FeedsFragment : BaseFragment() {
+class FeedsFragment() : BaseFragment() {
 
     private var mViewModel: FeedsViewModel? = null
     private var mFeedsAdapter: VideoAdapter? = null
@@ -56,6 +54,15 @@ class FeedsFragment : BaseFragment() {
     private var mCurrentPagePosition = 0
     private var mRoomId = -1
     private var mMockPlayingCallback : MockPlayingView.Callback? = null
+    private var mCallback : FeedsFragment.Callback ? = null
+    interface Callback{
+        fun startLoad()
+        fun stopLoad()
+    }
+
+    fun setCallback(callback: Callback){
+        mCallback = callback
+    }
 
     override fun getLayoutId(): Int {
         return R.layout.fragment_feeds
@@ -91,7 +98,7 @@ class FeedsFragment : BaseFragment() {
         }
 
 
-        mMockPlayingCallback = object :MockPlayingView.Callback{
+        mMockPlayingCallback = object : MockPlayingView.Callback{
             override fun onStart() {
                 mPlayer!!.resume()
             }
@@ -162,10 +169,11 @@ class FeedsFragment : BaseFragment() {
                     mPlayer!!.resume()
                 }
                 if(TXLiveConstants.PLAY_EVT_PLAY_BEGIN == p1){
-                    // todo
+                    mCallback?.stopLoad()
                 }
                 if(TXLiveConstants.PLAY_EVT_PLAY_LOADING == p1){
-                    // progress
+                    Log.d("scott","loading")
+                    mCallback?.startLoad()
                 }
             }
 
@@ -175,6 +183,7 @@ class FeedsFragment : BaseFragment() {
         })
         mPlayer!!.setPlayerView(mVideoView)
         mPlayer!!.startPlay(videoEntity.videoUrl)
+        mCallback?.startLoad()
         mRoomId = position
         mCurrentMockPlayingView = page as MockPlayingView
     }
@@ -261,7 +270,7 @@ class FeedsFragment : BaseFragment() {
         }
 
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
-            val mockPlayingView = MockPlayingView(context!!,mMockPlayingCallback!!)
+            val mockPlayingView = MockPlayingView(context!!, mMockPlayingCallback!!)
             mockPlayingView.id = position
             container.addView(mockPlayingView)
             mockPlayingView.update(videoList[position])

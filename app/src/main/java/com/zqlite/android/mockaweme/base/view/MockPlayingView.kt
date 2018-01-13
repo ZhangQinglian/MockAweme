@@ -1,4 +1,20 @@
-package com.zqlite.android.mockaweme
+/*
+ *    Copyright 2018 Qinglian.Zhang
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.zqlite.android.mockaweme.base.view
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -9,12 +25,11 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.animation.Animation
-import android.view.animation.BaseInterpolator
 import android.view.animation.LinearInterpolator
 import android.view.animation.OvershootInterpolator
 import android.widget.RelativeLayout
 import com.bumptech.glide.Glide
-import com.zqlite.android.mockaweme.base.view.AutoMoveImage
+import com.zqlite.android.mockaweme.R
 import com.zqlite.android.mockaweme.entity.VideoEntity
 import kotlinx.android.synthetic.main.view_mock_playing.view.*
 
@@ -40,7 +55,7 @@ class MockPlayingView(context: Context,val callback: Callback) : RelativeLayout(
     }
 
     private fun initView(){
-        inflate(context,R.layout.view_mock_playing,this)
+        inflate(context, R.layout.view_mock_playing,this)
         pause.alpha = 0.3f
         pause.scaleX = 2.5f
         pause.scaleY = 2.5f
@@ -112,7 +127,7 @@ class MockPlayingView(context: Context,val callback: Callback) : RelativeLayout(
         lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
         lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT)
         lp.rightMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,45f,resources.displayMetrics).toInt()
-        lp.bottomMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,45f,resources.displayMetrics).toInt()
+        lp.bottomMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,50f,resources.displayMetrics).toInt()
         autoMove.layoutParams = lp
         buttonPanel.addView(autoMove)
         if(musicCount%2 == 1){
