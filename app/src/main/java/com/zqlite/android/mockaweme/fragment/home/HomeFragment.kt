@@ -21,10 +21,13 @@ class HomeFragment : BaseFragment() {
 
     private var mPagerAdapter : HomePagerAdapter? = null
     private var mViewModel : HomeViewModel? = null
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         mPagerAdapter = HomePagerAdapter(childFragmentManager)
         pager.adapter = mPagerAdapter
         pager.currentItem = 1
+
         mViewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
         mViewModel!!.loadVideoList(context!!).observe(this, Observer<MutableList<VideoEntity>> {
 
