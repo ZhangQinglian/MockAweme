@@ -1,7 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/darker_gray">
 
-</RelativeLayout>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="300dp">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:contentScrim="?attr/colorPrimary"
+                app:expandedTitleMarginEnd="64dp"
+                app:expandedTitleMarginStart="48dp"
+                app:layout_scrollFlags="scroll">
+
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/big_avatar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:alpha="0.95"
+                        android:background="@color/colorPrimary" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="10dp">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/avatar"
+                            android:layout_width="90dp"
+                            android:layout_height="90dp"
+                            android:layout_marginTop="70dp"
+                            app:civ_border_color="@android:color/white"
+                            app:civ_border_width="1dp" />
+
+                        <ImageView
+                            android:id="@+id/more"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="100dp"
+                            android:background="@drawable/more_btn_bg"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/a8x" />
+
+                        <TextView
+                            android:layout_width="80dp"
+                            android:layout_height="35dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginTop="100dp"
+                            android:layout_toLeftOf="@id/more"
+                            android:background="@drawable/follow_btn_bg"
+                            android:gravity="center"
+                            android:text="关注"
+                            android:textColor="@android:color/white"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/avatar"
+                            android:layout_marginTop="10dp"
+                            android:gravity="top"
+                            android:text="番茄沙司"
+                            android:textColor="@android:color/white"
+                            android:textSize="25sp" />
+
+                        <TextView
+                            android:id="@+id/count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/name"
+                            android:gravity="top"
+                            android:text="抖音号：19919261"
+                            android:textColor="@android:color/white"
+                            android:textSize="13sp" />
+
+                        <TextView
+                            android:id="@+id/weibo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/count"
+                            android:drawableLeft="@drawable/we"
+                            android:drawablePadding="3dp"
+                            android:layout_alignParentRight="true"
+                            android:drawableRight="@drawable/v6"
+                            android:gravity="center"
+                            android:text="微博主页"
+                            android:textColor="@android:color/white"
+                            android:textSize="11sp" />
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:background="#37373f"
+                            android:layout_marginTop="10dp"
+                            android:layout_below="@id/weibo"/>
+                    </RelativeLayout>
+                </FrameLayout>
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+        </android.support.design.widget.AppBarLayout>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/video_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    </android.support.design.widget.CoordinatorLayout>
+
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:alpha="0.9"
+        android:rotation="180"
+        android:scaleType="centerInside"
+        android:src="@drawable/a7e" />
+</FrameLayout>

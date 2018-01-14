@@ -58,6 +58,7 @@ class FeedsFragment() : BaseFragment() {
     interface Callback{
         fun startLoad()
         fun stopLoad()
+        fun videoSelected(videoEntity: VideoEntity)
     }
 
     fun setCallback(callback: Callback){
@@ -84,6 +85,9 @@ class FeedsFragment() : BaseFragment() {
         video_pager.setOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener(){
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
                 mCurrentPagePosition = position
+                if(mVideoPageAdapter!!.count>0){
+                    mCallback?.videoSelected(mVideoPageAdapter!!.getVideoEntity(mCurrentPagePosition))
+                }
             }
         })
 

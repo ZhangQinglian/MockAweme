@@ -19,6 +19,7 @@ package com.zqlite.android.mockaweme
 import android.os.Bundle
 import android.view.View
 import com.zqlite.android.mockaweme.base.BaseFragment
+import com.zqlite.android.mockaweme.entity.VideoEntity
 import com.zqlite.android.mockaweme.fragment.feed.FeedsFragment
 import com.zqlite.android.mockaweme.fragment.home.HomeFragment
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -33,6 +34,10 @@ class MainFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val homeFragment = HomeFragment.getInstance(null)
         homeFragment.setFeedsFragmentCallback(object :FeedsFragment.Callback{
+            override fun videoSelected(videoEntity: VideoEntity) {
+
+            }
+
             override fun stopLoad() {
                 //bottom_navigation.stopProgress()
             }

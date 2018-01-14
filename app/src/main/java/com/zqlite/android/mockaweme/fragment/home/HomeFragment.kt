@@ -69,6 +69,10 @@ class HomeFragment : BaseFragment() {
             fragments.add(feedsFragment)
             fragments.add(profileFragment)
             feedsFragment.setCallback(object :FeedsFragment.Callback{
+                override fun videoSelected(videoEntity: VideoEntity) {
+                    profileFragment.updateVideoEntity(videoEntity)
+                }
+
                 override fun startLoad() {
                     //mFeedsFragmentCallback?.startLoad()
                 }
