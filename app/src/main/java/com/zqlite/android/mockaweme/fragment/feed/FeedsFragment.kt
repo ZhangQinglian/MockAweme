@@ -149,7 +149,7 @@ class FeedsFragment() : BaseFragment() {
         stopPlay()
     }
 
-    private fun resumePlay(){
+    public fun resumePlay(){
         mPlayer!!.resume()
         mCurrentMockPlayingView?.startPlay()
     }
@@ -158,7 +158,7 @@ class FeedsFragment() : BaseFragment() {
         mVideoView!!.onDestroy()
     }
 
-    private fun pause(){
+    public fun pause(){
         if(mPlayer!!.isPlaying){
             mPlayer!!.pause()
         }

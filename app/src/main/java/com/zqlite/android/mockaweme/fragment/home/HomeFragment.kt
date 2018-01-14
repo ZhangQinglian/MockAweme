@@ -37,6 +37,14 @@ class HomeFragment : BaseFragment() {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
                 Log.d("scott","position = $position   positionOffset = $positionOffset   positionOffsetPixels = $positionOffsetPixels")
             }
+
+            override fun onPageSelected(position: Int) {
+                if(position != 1){
+                    mPagerAdapter?.pausePlay()
+                }else{
+                    mPagerAdapter?.resumePlay()
+                }
+            }
         })
         mViewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
         mViewModel!!.loadVideoList(context!!).observe(this, Observer<MutableList<VideoEntity>> {
@@ -84,6 +92,12 @@ class HomeFragment : BaseFragment() {
             })
         }
 
+        fun pausePlay(){
+            feedsFragment?.pause()
+        }
+        fun resumePlay(){
+            feedsFragment?.resumePlay()
+        }
         override fun getItem(position: Int): Fragment {
             return fragments[position]
         }
