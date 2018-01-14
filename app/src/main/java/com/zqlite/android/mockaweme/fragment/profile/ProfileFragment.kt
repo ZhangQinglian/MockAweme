@@ -46,9 +46,7 @@ class ProfileFragment : BaseFragment() {
 
             val left = app_bar.totalScrollRange + verticalOffset
             val titlebarH = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,70f,resources.displayMetrics).toInt()
-            Log.d("scott", "left = $left")
             val percent :Float = (1f*(app_bar.totalScrollRange.toFloat() - left)/(app_bar.totalScrollRange-titlebarH))
-            Log.d("scott", "percent = $percent")
             title_bar_panel.alpha = percent
             if(left <= titlebarH){
                 mock_tab_container.visibility = View.VISIBLE

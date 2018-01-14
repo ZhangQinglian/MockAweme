@@ -174,12 +174,10 @@ class FeedsFragment() : BaseFragment() {
                     mPlayer!!.resume()
                 }
                 if(TXLiveConstants.PLAY_EVT_PLAY_BEGIN == p1){
-                    //mCallback?.stopLoad()
                     bottom_navigation.stopProgress()
                 }
                 if(TXLiveConstants.PLAY_EVT_PLAY_LOADING == p1){
                     Log.d("scott","loading")
-                    //mCallback?.startLoad()
                     bottom_navigation.startProgress()
                 }
             }
@@ -190,7 +188,7 @@ class FeedsFragment() : BaseFragment() {
         })
         mPlayer!!.setPlayerView(mVideoView)
         mPlayer!!.startPlay(videoEntity.videoUrl)
-        mCallback?.startLoad()
+        bottom_navigation.startProgress()
         mRoomId = position
         mCurrentMockPlayingView = page as MockPlayingView
     }
