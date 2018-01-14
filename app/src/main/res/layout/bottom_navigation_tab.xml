@@ -20,4 +20,20 @@
     <TextView
         android:id="@+id/text"
         style="@style/HomeNavTabText"/>
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerInside"
+        android:scaleX="0"
+        android:scaleY="0"/>
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@drawable/bottom_navigation_tab_line"
+        android:layout_gravity="bottom"
+        android:layout_marginRight="21.5dp"
+        android:layout_marginLeft="21.5dp"
+        android:translationY="2dp"/>
 </FrameLayout>

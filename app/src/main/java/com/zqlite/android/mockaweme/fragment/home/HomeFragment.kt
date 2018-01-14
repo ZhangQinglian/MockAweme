@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.view.ViewPager
+import android.util.Log
 import android.view.View
 import com.zqlite.android.mockaweme.R
 import com.zqlite.android.mockaweme.base.BaseFragment
@@ -21,13 +23,21 @@ class HomeFragment : BaseFragment() {
 
     private var mPagerAdapter : HomePagerAdapter? = null
     private var mViewModel : HomeViewModel? = null
+    private var mFeedsFragmentCallback : FeedsFragment.Callback? = null
 
+    fun setFeedsFragmentCallback(callback:FeedsFragment.Callback){
+        mFeedsFragmentCallback = callback
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         mPagerAdapter = HomePagerAdapter(childFragmentManager)
         pager.adapter = mPagerAdapter
         pager.currentItem = 1
-
+        pager.addOnPageChangeListener(object :ViewPager.SimpleOnPageChangeListener(){
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                Log.d("scott","position = $position   positionOffset = $positionOffset   positionOffsetPixels = $positionOffsetPixels")
+            }
+        })
         mViewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
         mViewModel!!.loadVideoList(context!!).observe(this, Observer<MutableList<VideoEntity>> {
 
@@ -60,11 +70,11 @@ class HomeFragment : BaseFragment() {
             fragments.add(profileFragment)
             feedsFragment.setCallback(object :FeedsFragment.Callback{
                 override fun startLoad() {
-                    bottom_navigation.startProgress()
+                    //mFeedsFragmentCallback?.startLoad()
                 }
 
                 override fun stopLoad() {
-                    bottom_navigation.stopProgress()
+                    //mFeedsFragmentCallback?.stopLoad()
                 }
 
             })

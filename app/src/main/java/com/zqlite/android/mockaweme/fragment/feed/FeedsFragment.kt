@@ -119,6 +119,7 @@ class FeedsFragment() : BaseFragment() {
             mVideoPageAdapter?.update(it!!.toList())
         })
 
+        bottom_navigation.startCheck(0)
     }
 
     private fun videoLocaleCache() {
@@ -169,11 +170,13 @@ class FeedsFragment() : BaseFragment() {
                     mPlayer!!.resume()
                 }
                 if(TXLiveConstants.PLAY_EVT_PLAY_BEGIN == p1){
-                    mCallback?.stopLoad()
+                    //mCallback?.stopLoad()
+                    bottom_navigation.stopProgress()
                 }
                 if(TXLiveConstants.PLAY_EVT_PLAY_LOADING == p1){
                     Log.d("scott","loading")
-                    mCallback?.startLoad()
+                    //mCallback?.startLoad()
+                    bottom_navigation.startProgress()
                 }
             }
 
