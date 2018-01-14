@@ -13,7 +13,7 @@
         <android.support.design.widget.AppBarLayout
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
-            android:layout_height="300dp">
+            android:layout_height="370dp">
 
             <android.support.design.widget.CollapsingToolbarLayout
                 android:layout_width="match_parent"
@@ -42,7 +42,7 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:padding="10dp">
+                        android:padding="12dp">
 
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/avatar"
@@ -100,6 +100,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/count"
+                            android:layout_marginTop="-5dp"
                             android:drawableLeft="@drawable/we"
                             android:drawablePadding="3dp"
                             android:layout_alignParentRight="true"
@@ -109,11 +110,111 @@
                             android:textColor="@android:color/white"
                             android:textSize="11sp" />
                         <View
+                            android:id="@+id/line"
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
                             android:background="#37373f"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="5dp"
                             android:layout_below="@id/weibo"/>
+                        <TextView
+                            android:id="@+id/sign"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/line"
+                            android:gravity="top"
+                            android:text="本宝宝暂时还没有想到个性签名"
+                            android:textColor="#8f8f92"
+                            android:layout_marginTop="2dp"
+                            android:textSize="12sp" />
+                        <LinearLayout
+                            android:id="@+id/info"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_below="@id/sign"
+                            android:layout_marginTop="10dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="20dp"
+                                android:drawableLeft="@drawable/a9b"
+                                android:paddingRight="7dp"
+                                android:paddingLeft="7dp"
+                                android:text="1岁"
+                                android:textColor="@android:color/white"
+                                android:textSize="13sp"
+                                android:background="@drawable/tag_bg_1"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="20dp"
+                                android:paddingRight="7dp"
+                                android:paddingLeft="7dp"
+                                android:text="摩羯座"
+                                android:textColor="@android:color/white"
+                                android:layout_marginLeft="5dp"
+                                android:textSize="13sp"
+                                android:background="@drawable/tag_bg_2"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="20dp"
+                                android:paddingRight="7dp"
+                                android:paddingLeft="7dp"
+                                android:text="江苏⋅南京"
+                                android:textColor="@android:color/white"
+                                android:layout_marginLeft="5dp"
+                                android:textSize="13sp"
+                                android:background="@drawable/tag_bg_3"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_below="@id/info"
+                            android:layout_marginTop="15dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="22sp"
+                                android:textStyle="bold"
+                                android:textColor="@android:color/white"
+                                android:text="22"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="13sp"
+                                android:layout_marginLeft="3dp"
+                                android:textColor="@android:color/white"
+                                android:text="关注"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="22sp"
+                                android:textStyle="bold"
+                                android:layout_marginLeft="12dp"
+                                android:textColor="@android:color/white"
+                                android:text="3.4w"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="13sp"
+                                android:layout_marginLeft="3dp"
+                                android:textColor="@android:color/white"
+                                android:text="粉丝"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="22sp"
+                                android:textStyle="bold"
+                                android:layout_marginLeft="12dp"
+                                android:textColor="@android:color/white"
+                                android:text="100.4w"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="13sp"
+                                android:layout_marginLeft="3dp"
+                                android:textColor="@android:color/white"
+                                android:text="获赞"/>
+                        </LinearLayout>
                     </RelativeLayout>
                 </FrameLayout>
 
