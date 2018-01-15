@@ -50,18 +50,19 @@ class FeedsFragment() : BaseFragment() {
     private var mVideoPageAdapter: VideoPagerAdapter? = null
     private var mPlayer: TXVodPlayer? = null
     private var mVideoView: TXCloudVideoView? = null
-    private var mCurrentMockPlayingView : MockPlayingView? = null
+    private var mCurrentMockPlayingView: MockPlayingView? = null
     private var mCurrentPagePosition = 0
     private var mRoomId = -1
-    private var mMockPlayingCallback : MockPlayingView.Callback? = null
-    private var mCallback : FeedsFragment.Callback ? = null
-    interface Callback{
+    private var mMockPlayingCallback: MockPlayingView.Callback? = null
+    private var mCallback: FeedsFragment.Callback? = null
+
+    interface Callback {
         fun startLoad()
         fun stopLoad()
         fun videoSelected(videoEntity: VideoEntity)
     }
 
-    fun setCallback(callback: Callback){
+    fun setCallback(callback: Callback) {
         mCallback = callback
     }
 
@@ -82,28 +83,40 @@ class FeedsFragment() : BaseFragment() {
         mVideoPageAdapter = VideoPagerAdapter()
         video_pager.adapter = mVideoPageAdapter
 
-        video_pager.setOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener(){
+        video_pager.setOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
                 mCurrentPagePosition = position
-                swipe.isEnabled = mCurrentPagePosition == 0
-                if(mVideoPageAdapter!!.count>0){
+
+                if (mVideoPageAdapter!!.count > 0) {
                     mCallback?.videoSelected(mVideoPageAdapter!!.getVideoEntity(mCurrentPagePosition))
+                }
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+                if (state == ViewPager.SCROLL_STATE_IDLE) {
+                    Log.d("scott", "select position = $mCurrentPagePosition")
+                    swipe.isEnabled = (mCurrentPagePosition == 0)
+                    swipe.setProgressViewOffset(false,100,250)
+                } else {
+                    swipe.isEnabled = false
+                    Log.d("scott", "disable swipe")
                 }
             }
         })
 
         video_pager.setPageTransformer(false) { page, position ->
-            if(mCurrentPagePosition == page.id && position == 0f && mRoomId != mCurrentPagePosition){
-                if(mVideoView!!.parent != null && mVideoView!!.parent is FrameLayout){
+            if (mCurrentPagePosition == page.id && position == 0f && mRoomId != mCurrentPagePosition) {
+                if (mVideoView!!.parent != null && mVideoView!!.parent is FrameLayout) {
                     mPlayer!!.stopPlay(true)
                     ((mVideoView!!.parent) as FrameLayout).removeView(mVideoView)
                 }
-                attachVideoView(mCurrentPagePosition,page)
+                attachVideoView(mCurrentPagePosition, page)
+
             }
         }
 
 
-        mMockPlayingCallback = object : MockPlayingView.Callback{
+        mMockPlayingCallback = object : MockPlayingView.Callback {
             override fun onStart() {
                 mPlayer!!.resume()
             }
@@ -118,13 +131,14 @@ class FeedsFragment() : BaseFragment() {
 
         }
         swipe.isRefreshing = true
-        swipe.setProgressViewOffset(false,100,250)
+        swipe.setProgressViewOffset(false, 100, 250)
         swipe.setOnRefreshListener {
             mRoomId = -1
-            loadVideos() }
+            loadVideos()
+        }
         mViewModel = ViewModelProviders.of(this)[FeedsViewModel::class.java]
         mViewModel?.getVideoList()?.observe(this, Observer<MutableList<VideoEntity>> {
-            Log.d("scott",it!![0].videoUrl)
+            Log.d("scott", it!![0].videoUrl)
             mFeedsAdapter?.update(it!!.toList())
             mVideoPageAdapter?.update(it!!.toList())
             swipe.isRefreshing = false
@@ -136,10 +150,11 @@ class FeedsFragment() : BaseFragment() {
 
     }
 
-    private fun loadVideos(){
-        Log.d("scott","load videos")
+    private fun loadVideos() {
+        Log.d("scott", "load videos")
         mViewModel?.loadVideoList(context!!)
     }
+
     private fun videoLocaleCache() {
 //        val mConfig = TXVodPlayConfig()
 //        mConfig.setCacheFolderPath(
@@ -147,6 +162,7 @@ class FeedsFragment() : BaseFragment() {
 //        mConfig.setMaxCacheItems(50)
 //        mPlayer!!.setConfig(mConfig)
     }
+
     override fun onResume() {
         super.onResume()
         resumePlay()
@@ -163,35 +179,37 @@ class FeedsFragment() : BaseFragment() {
         stopPlay()
     }
 
-    fun resumePlay(){
+    fun resumePlay() {
         mPlayer!!.resume()
         mCurrentMockPlayingView?.startPlay()
     }
-    private fun stopPlay(){
+
+    private fun stopPlay() {
         mPlayer!!.stopPlay(true)
         mVideoView!!.onDestroy()
     }
 
-    fun pause(){
-        if(mPlayer!!.isPlaying){
+    fun pause() {
+        if (mPlayer!!.isPlaying) {
             mPlayer!!.pause()
         }
     }
-    private fun attachVideoView(position: Int,page:View){
-        val container : FrameLayout = page.findViewById(R.id.container)
+
+    private fun attachVideoView(position: Int, page: View) {
+        val container: FrameLayout = page.findViewById(R.id.container)
         container.addView(mVideoView)
         val videoEntity = mVideoPageAdapter!!.getVideoEntity(position)
-        mPlayer!!.setVodListener(object : ITXVodPlayListener{
+        mPlayer!!.setVodListener(object : ITXVodPlayListener {
             override fun onPlayEvent(p0: TXVodPlayer?, p1: Int, p2: Bundle?) {
-                if(TXLiveConstants.PLAY_EVT_PLAY_END == p1){
+                if (TXLiveConstants.PLAY_EVT_PLAY_END == p1) {
                     mPlayer!!.seek(0)
                     mPlayer!!.resume()
                 }
-                if(TXLiveConstants.PLAY_EVT_PLAY_BEGIN == p1){
+                if (TXLiveConstants.PLAY_EVT_PLAY_BEGIN == p1) {
                     bottom_navigation.stopProgress()
                 }
-                if(TXLiveConstants.PLAY_EVT_PLAY_LOADING == p1){
-                    Log.d("scott","loading")
+                if (TXLiveConstants.PLAY_EVT_PLAY_LOADING == p1) {
+                    Log.d("scott", "loading")
                     bottom_navigation.startProgress()
                 }
             }
@@ -278,12 +296,13 @@ class FeedsFragment() : BaseFragment() {
 
         override fun notifyDataSetChanged() {
             super.notifyDataSetChanged()
-            for(i in 0 until videoList.size){
+            for (i in 0 until videoList.size) {
                 val view = video_pager.findViewWithTag<MockPlayingView>(i)
                 view?.update(videoList[i])
             }
         }
-        fun getVideoEntity(position: Int):VideoEntity{
+
+        fun getVideoEntity(position: Int): VideoEntity {
             return videoList[position]
         }
 
@@ -296,7 +315,7 @@ class FeedsFragment() : BaseFragment() {
         }
 
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
-            Log.d("scott"," instantiateItem ")
+            Log.d("scott", " instantiateItem ")
             val mockPlayingView = MockPlayingView(context!!, mMockPlayingCallback!!)
             mockPlayingView.id = position
             container.addView(mockPlayingView)
