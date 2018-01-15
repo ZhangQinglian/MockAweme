@@ -51,28 +51,41 @@
                             android:layout_marginTop="70dp"
                             app:civ_border_color="@android:color/white"
                             app:civ_border_width="1dp" />
-
-                        <ImageView
-                            android:id="@+id/more"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
-                            android:layout_marginTop="100dp"
-                            android:background="@drawable/more_btn_bg"
-                            android:scaleType="centerInside"
-                            android:src="@drawable/a8x" />
+                            android:orientation="horizontal"
+                            android:layout_marginTop="100dp">
 
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="35dp"
-                            android:layout_marginRight="5dp"
-                            android:layout_marginTop="100dp"
-                            android:layout_toLeftOf="@id/more"
-                            android:background="@drawable/follow_btn_bg"
-                            android:gravity="center"
-                            android:text="关注"
-                            android:textColor="@android:color/white"
-                            android:textSize="16sp" />
+                            <TextView
+                                android:id="@+id/share"
+                                android:layout_width="80dp"
+                                android:layout_height="35dp"
+                                android:layout_marginRight="5dp"
+                                android:background="@drawable/more_btn_bg"
+                                android:gravity="center"
+                                android:text="分享主页"
+                                android:textColor="@android:color/white"
+                                android:textSize="16sp" />
+                            <TextView
+                                android:id="@+id/follow"
+                                android:layout_width="80dp"
+                                android:layout_height="35dp"
+                                android:layout_marginRight="5dp"
+                                android:background="@drawable/follow_btn_bg"
+                                android:gravity="center"
+                                android:text="关注"
+                                android:textColor="@android:color/white"
+                                android:textSize="16sp" />
+                            <ImageView
+                                android:id="@+id/more"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:background="@drawable/more_btn_bg"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/a8x" />
+                        </LinearLayout>
 
                         <TextView
                             android:id="@+id/name"

@@ -23,18 +23,27 @@ import com.zqlite.android.mockaweme.base.view.BottomNavigation
 import com.zqlite.android.mockaweme.entity.VideoEntity
 import com.zqlite.android.mockaweme.fragment.feed.FeedsFragment
 import com.zqlite.android.mockaweme.fragment.home.HomeFragment
+import com.zqlite.android.mockaweme.fragment.profile.ProfileFragment
 import kotlinx.android.synthetic.main.fragment_main.*
 /**
  * Created by scott on 2018/1/14.
  */
 class MainFragment : BaseFragment() {
+
+
+    val mHomeFragment = HomeFragment.getInstance(null)
+    val mMeFragment :ProfileFragment
+    init {
+        val args = Bundle()
+        args.putBoolean("me",true)
+        mMeFragment = ProfileFragment.getInstance(args)
+    }
     override fun getLayoutId(): Int {
         return R.layout.fragment_main
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val homeFragment = HomeFragment.getInstance(null)
-        homeFragment.setFeedsFragmentCallback(object :FeedsFragment.Callback{
+        mHomeFragment.setFeedsFragmentCallback(object :FeedsFragment.Callback{
             override fun videoSelected(videoEntity: VideoEntity) {
 
             }
@@ -48,13 +57,16 @@ class MainFragment : BaseFragment() {
             }
 
         })
-        childFragmentManager.beginTransaction().add(R.id.container,homeFragment).commit()
-        homeFragment.setOnTabClickCallback(object :BottomNavigation.OnTabClick{
+
+        childFragmentManager.beginTransaction().add(R.id.container,mMeFragment).commit()
+        hideFragment(mMeFragment)
+        childFragmentManager.beginTransaction().add(R.id.container,mHomeFragment).commit()
+        mHomeFragment.setOnTabClickCallback(object :BottomNavigation.OnTabClick{
             override fun onTabClick(index: Int) {
                 if(index > 0){
                     bottom_navigation.visibility = View.VISIBLE
                     bottom_navigation.startCheck(index)
-                    homeFragment.hideInnerBottomNav()
+                    mHomeFragment.hideInnerBottomNav()
                 }
             }
         })
@@ -62,13 +74,28 @@ class MainFragment : BaseFragment() {
             override fun onTabClick(index: Int) {
                 if(index == 0){
                     bottom_navigation.visibility = View.GONE
-                    homeFragment.showInnerBottomNav()
+                    mHomeFragment.showInnerBottomNav()
+                    hideFragment(mMeFragment)
+                    showFragment(mHomeFragment)
+                }
+                if(index ==3 ){
+                    hideFragment(mHomeFragment)
+                    showFragment(mMeFragment)
                 }
             }
 
         })
     }
 
+    private fun hideFragment(fragment:BaseFragment){
+        childFragmentManager.beginTransaction().hide(fragment).commit()
+        fragment.onHide()
+    }
+
+    private fun showFragment(fragment:BaseFragment){
+        childFragmentManager.beginTransaction().show(fragment).commit()
+        fragment.onShow()
+    }
     companion object Instance{
         fun getInstance(args:Bundle?): MainFragment {
             val fragment = MainFragment()

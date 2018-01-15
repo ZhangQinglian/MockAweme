@@ -46,6 +46,7 @@ import kotlinx.android.synthetic.main.fragment_feeds.*
  */
 class FeedsFragment : BaseFragment() {
 
+
     private var mViewModel: FeedsViewModel? = null
     private var mFeedsAdapter: VideoAdapter? = null
     private var mVideoPageAdapter: VideoPagerAdapter? = null
@@ -340,6 +341,5 @@ class FeedsFragment : BaseFragment() {
         override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
             container.removeView(container.findViewById(position))
         }
-
     }
 }

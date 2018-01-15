@@ -47,7 +47,7 @@ class ProfileFragment : BaseFragment() {
             val left = app_bar.totalScrollRange + verticalOffset
             val titlebarH = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,70f,resources.displayMetrics).toInt()
             val percent :Float = (1f*(app_bar.totalScrollRange.toFloat() - left)/(app_bar.totalScrollRange-titlebarH))
-            title_bar_panel.alpha = percent
+            title_bar_panel.alpha = percent*2
             if(left <= titlebarH){
                 mock_tab_container.visibility = View.VISIBLE
             }else{
@@ -58,6 +58,17 @@ class ProfileFragment : BaseFragment() {
 
         mProfileViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         mProfileViewModel?.loadVideoList(context!!)?.observe(this, Observer<MutableList<VideoEntity>> { t -> mAdapter?.update(t!!.toList()) })
+
+        val args = arguments
+        if(args != null){
+            if(args["me"] as Boolean){
+                Glide.with(context!!).load("http://p2c5nlwg0.bkt.clouddn.com/my_avatar.png").into(avatar)
+                Glide.with(context!!).load("http://p2c5nlwg0.bkt.clouddn.com/my_avatar.png").into(big_avatar)
+                follow.visibility = View.GONE
+            }
+        }else{
+            share.visibility = View.GONE
+        }
     }
 
     override fun getLayoutId(): Int {

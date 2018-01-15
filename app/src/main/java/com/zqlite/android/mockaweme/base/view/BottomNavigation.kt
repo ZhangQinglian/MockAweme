@@ -114,6 +114,7 @@ class BottomNavigation : RelativeLayout {
                 mMeTab?.check(null)
             }
         }
+        mOnTabClick?.onTabClick(index)
     }
 
     fun startProgress() {

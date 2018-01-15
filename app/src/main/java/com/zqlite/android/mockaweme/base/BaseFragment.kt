@@ -16,4 +16,8 @@ abstract class BaseFragment : Fragment() {
     }
 
     abstract fun getLayoutId():Int
+
+    open fun onHide(){}
+
+    open fun onShow(){}
 }

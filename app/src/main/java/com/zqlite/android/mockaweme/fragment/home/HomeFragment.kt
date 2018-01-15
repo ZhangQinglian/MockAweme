@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
  */
 class HomeFragment : BaseFragment() {
 
+
     private var mPagerAdapter : HomePagerAdapter? = null
     private var mViewModel : HomeViewModel? = null
     private var mFeedsFragmentCallback : FeedsFragment.Callback? = null
@@ -72,7 +73,13 @@ class HomeFragment : BaseFragment() {
     override fun getLayoutId(): Int {
         return R.layout.fragment_home
     }
+    override fun onHide() {
+        mPagerAdapter?.pausePlay()
+    }
 
+    override fun onShow() {
+        mPagerAdapter?.resumePlay()
+    }
     companion object Instance{
         fun getInstance(args:Bundle?):HomeFragment{
             val fragment = HomeFragment()
