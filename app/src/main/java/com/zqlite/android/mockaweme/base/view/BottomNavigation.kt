@@ -50,7 +50,10 @@ class BottomNavigation : RelativeLayout {
         init()
     }
 
-    public fun startCheck(index:Int){
+    public fun setCallback(callback:OnTabClick?){
+        mOnTabClick = callback
+    }
+    fun startCheck(index:Int){
         innerClick(index)
     }
     private fun init() {

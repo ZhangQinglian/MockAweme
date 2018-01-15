@@ -37,13 +37,14 @@ import com.tencent.rtmp.ui.TXCloudVideoView
 import com.zqlite.android.mockaweme.base.view.MockPlayingView
 import com.zqlite.android.mockaweme.R
 import com.zqlite.android.mockaweme.base.BaseFragment
+import com.zqlite.android.mockaweme.base.view.BottomNavigation
 import com.zqlite.android.mockaweme.entity.VideoEntity
 import kotlinx.android.synthetic.main.fragment_feeds.*
 
 /**
  * Created by scott on 2018/1/13.
  */
-class FeedsFragment() : BaseFragment() {
+class FeedsFragment : BaseFragment() {
 
     private var mViewModel: FeedsViewModel? = null
     private var mFeedsAdapter: VideoAdapter? = null
@@ -55,7 +56,7 @@ class FeedsFragment() : BaseFragment() {
     private var mRoomId = -1
     private var mMockPlayingCallback: MockPlayingView.Callback? = null
     private var mCallback: FeedsFragment.Callback? = null
-
+    private var mOnTabClick:BottomNavigation.OnTabClick? = null
     interface Callback {
         fun startLoad()
         fun stopLoad()
@@ -147,9 +148,21 @@ class FeedsFragment() : BaseFragment() {
 
 
         bottom_navigation.startCheck(0)
+        bottom_navigation.setCallback(mOnTabClick)
 
     }
 
+    fun setTabClickCallback(callback:BottomNavigation.OnTabClick?){
+        mOnTabClick = callback
+    }
+
+    fun hideInnerBottomNav(){
+        bottom_navigation.visibility = View.GONE
+    }
+    fun showInnerBottomNav(){
+        bottom_navigation.visibility = View.VISIBLE
+        bottom_navigation.startCheck(0)
+    }
     private fun loadVideos() {
         Log.d("scott", "load videos")
         mViewModel?.loadVideoList(context!!)

@@ -19,6 +19,7 @@ package com.zqlite.android.mockaweme
 import android.os.Bundle
 import android.view.View
 import com.zqlite.android.mockaweme.base.BaseFragment
+import com.zqlite.android.mockaweme.base.view.BottomNavigation
 import com.zqlite.android.mockaweme.entity.VideoEntity
 import com.zqlite.android.mockaweme.fragment.feed.FeedsFragment
 import com.zqlite.android.mockaweme.fragment.home.HomeFragment
@@ -48,6 +49,24 @@ class MainFragment : BaseFragment() {
 
         })
         childFragmentManager.beginTransaction().add(R.id.container,homeFragment).commit()
+        homeFragment.setOnTabClickCallback(object :BottomNavigation.OnTabClick{
+            override fun onTabClick(index: Int) {
+                if(index > 0){
+                    bottom_navigation.visibility = View.VISIBLE
+                    bottom_navigation.startCheck(index)
+                    homeFragment.hideInnerBottomNav()
+                }
+            }
+        })
+        bottom_navigation.setCallback(object :BottomNavigation.OnTabClick{
+            override fun onTabClick(index: Int) {
+                if(index == 0){
+                    bottom_navigation.visibility = View.GONE
+                    homeFragment.showInnerBottomNav()
+                }
+            }
+
+        })
     }
 
     companion object Instance{

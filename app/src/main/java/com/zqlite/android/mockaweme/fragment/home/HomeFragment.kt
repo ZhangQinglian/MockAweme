@@ -8,9 +8,12 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.zqlite.android.mockaweme.R
 import com.zqlite.android.mockaweme.base.BaseFragment
+import com.zqlite.android.mockaweme.base.view.BottomNavigation
 import com.zqlite.android.mockaweme.entity.VideoEntity
 import com.zqlite.android.mockaweme.fragment.feed.FeedsFragment
 import com.zqlite.android.mockaweme.fragment.camera.CameraFragment
@@ -24,13 +27,17 @@ class HomeFragment : BaseFragment() {
     private var mPagerAdapter : HomePagerAdapter? = null
     private var mViewModel : HomeViewModel? = null
     private var mFeedsFragmentCallback : FeedsFragment.Callback? = null
-
+    private var mOnTabClick : BottomNavigation.OnTabClick? = null
     fun setFeedsFragmentCallback(callback:FeedsFragment.Callback){
         mFeedsFragmentCallback = callback
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mPagerAdapter = HomePagerAdapter(childFragmentManager)
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         pager.adapter = mPagerAdapter
         pager.currentItem = 1
         pager.addOnPageChangeListener(object :ViewPager.SimpleOnPageChangeListener(){
@@ -52,6 +59,16 @@ class HomeFragment : BaseFragment() {
         })
     }
 
+    fun setOnTabClickCallback(callback:BottomNavigation.OnTabClick?){
+        mOnTabClick = callback
+    }
+
+    fun hideInnerBottomNav(){
+        mPagerAdapter!!.hideInnerBottomNav()
+    }
+    fun showInnerBottomNav(){
+        mPagerAdapter!!.showInnerBottomNav()
+    }
     override fun getLayoutId(): Int {
         return R.layout.fragment_home
     }
@@ -90,13 +107,20 @@ class HomeFragment : BaseFragment() {
                 }
 
             })
+            feedsFragment.setTabClickCallback(mOnTabClick)
         }
 
+        fun hideInnerBottomNav(){
+            feedsFragment.hideInnerBottomNav()
+        }
+        fun showInnerBottomNav(){
+            feedsFragment.showInnerBottomNav()
+        }
         fun pausePlay(){
-            feedsFragment?.pause()
+            feedsFragment.pause()
         }
         fun resumePlay(){
-            feedsFragment?.resumePlay()
+            feedsFragment.resumePlay()
         }
         override fun getItem(position: Int): Fragment {
             return fragments[position]

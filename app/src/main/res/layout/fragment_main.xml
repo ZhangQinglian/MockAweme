@@ -26,5 +26,6 @@
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_navigation_height"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:background="@android:color/black"/>
 </RelativeLayout>
