@@ -16,7 +16,7 @@ class FeedsViewModel:ViewModel(){
 
     private val videoList : MutableLiveData<MutableList<VideoEntity>> = MutableLiveData()
 
-    fun loadVideoList(context: Context): LiveData<MutableList<VideoEntity>> {
+    fun loadVideoList(context: Context) {
 
         val getVideoUseCase = GetResUseCase()
         val requestValue = GetResUseCase.RequestValues(context)
@@ -30,7 +30,9 @@ class FeedsViewModel:ViewModel(){
 
         })
 
+    }
 
+    fun getVideoList(): LiveData<MutableList<VideoEntity>>{
         return videoList
     }
 }

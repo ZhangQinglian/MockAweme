@@ -10,6 +10,7 @@ import com.zqlite.android.mockaweme.base.usecase.UseCase
 import com.zqlite.android.mockaweme.entity.VideoEntity
 import com.zqlite.android.mockaweme.repository.NetRepo
 import org.json.JSONObject
+import java.util.*
 
 /**
  * Created by scott on 2018/1/13.
@@ -25,6 +26,7 @@ class GetResUseCase : UseCase<GetResUseCase.RequestValues, GetResUseCase.Respons
             val videoArrayObject = jsonObject["videos"]
             val turnsType = object : TypeToken<MutableList<VideoEntity>>() {}.type
             val videoList : MutableList<VideoEntity> =  gson.fromJson(videoArrayObject.toString(),turnsType)
+            Collections.shuffle(videoList)
             val responseValues = GetResUseCase.ResponseValues(videoList)
             useCaseCallback!!.onSuccess(responseValues)
         }, Response.ErrorListener {

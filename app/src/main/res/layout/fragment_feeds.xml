@@ -3,18 +3,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black">
+
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <fr.castorflex.android.verticalviewpager.VerticalViewPager
+            android:id="@+id/video_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible"/>
-    <fr.castorflex.android.verticalviewpager.VerticalViewPager
-        android:id="@+id/video_pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:visibility="invisible" />
+
     <com.zqlite.android.mockaweme.base.view.BottomNavigation
         android:id="@+id/bottom_navigation"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/bottom_navigation_height"/>
+        android:layout_height="@dimen/bottom_navigation_height"
+        android:layout_alignParentBottom="true" />
 </RelativeLayout>

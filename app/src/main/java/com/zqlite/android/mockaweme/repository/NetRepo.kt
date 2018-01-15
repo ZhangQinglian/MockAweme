@@ -11,7 +11,7 @@ import com.android.volley.toolbox.Volley
  * Created by scott on 2018/1/13.
  */
 class NetRepo(context: Context) {
-    private val url = "http://p2c5nlwg0.bkt.clouddn.com/videolistv2.json"
+    private val url = "http://p2c5nlwg0.bkt.clouddn.com/videolistv3.json"
     private val requestQueue: RequestQueue = Volley.newRequestQueue(context)
 
     fun getVideoList(listener: Response.Listener<String>, error: Response.ErrorListener) {

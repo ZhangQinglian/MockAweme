@@ -85,6 +85,7 @@ class FeedsFragment() : BaseFragment() {
         video_pager.setOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener(){
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
                 mCurrentPagePosition = position
+                swipe.isEnabled = mCurrentPagePosition == 0
                 if(mVideoPageAdapter!!.count>0){
                     mCallback?.videoSelected(mVideoPageAdapter!!.getVideoEntity(mCurrentPagePosition))
                 }
@@ -116,16 +117,29 @@ class FeedsFragment() : BaseFragment() {
             }
 
         }
-
+        swipe.isRefreshing = true
+        swipe.setProgressViewOffset(false,100,250)
+        swipe.setOnRefreshListener {
+            mRoomId = -1
+            loadVideos() }
         mViewModel = ViewModelProviders.of(this)[FeedsViewModel::class.java]
-        mViewModel?.loadVideoList(context!!)?.observe(this, Observer<MutableList<VideoEntity>> {
+        mViewModel?.getVideoList()?.observe(this, Observer<MutableList<VideoEntity>> {
+            Log.d("scott",it!![0].videoUrl)
             mFeedsAdapter?.update(it!!.toList())
             mVideoPageAdapter?.update(it!!.toList())
+            swipe.isRefreshing = false
         })
+        loadVideos()
+
 
         bottom_navigation.startCheck(0)
+
     }
 
+    private fun loadVideos(){
+        Log.d("scott","load videos")
+        mViewModel?.loadVideoList(context!!)
+    }
     private fun videoLocaleCache() {
 //        val mConfig = TXVodPlayConfig()
 //        mConfig.setCacheFolderPath(
@@ -149,7 +163,7 @@ class FeedsFragment() : BaseFragment() {
         stopPlay()
     }
 
-    public fun resumePlay(){
+    fun resumePlay(){
         mPlayer!!.resume()
         mCurrentMockPlayingView?.startPlay()
     }
@@ -158,7 +172,7 @@ class FeedsFragment() : BaseFragment() {
         mVideoView!!.onDestroy()
     }
 
-    public fun pause(){
+    fun pause(){
         if(mPlayer!!.isPlaying){
             mPlayer!!.pause()
         }
@@ -262,6 +276,13 @@ class FeedsFragment() : BaseFragment() {
             notifyDataSetChanged()
         }
 
+        override fun notifyDataSetChanged() {
+            super.notifyDataSetChanged()
+            for(i in 0 until videoList.size){
+                val view = video_pager.findViewWithTag<MockPlayingView>(i)
+                view?.update(videoList[i])
+            }
+        }
         fun getVideoEntity(position: Int):VideoEntity{
             return videoList[position]
         }
@@ -275,10 +296,12 @@ class FeedsFragment() : BaseFragment() {
         }
 
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
+            Log.d("scott"," instantiateItem ")
             val mockPlayingView = MockPlayingView(context!!, mMockPlayingCallback!!)
             mockPlayingView.id = position
             container.addView(mockPlayingView)
             mockPlayingView.update(videoList[position])
+            mockPlayingView.tag = position
             return mockPlayingView
         }
 
