@@ -43,7 +43,7 @@ class HomeFragment : BaseFragment() {
         pager.currentItem = 1
         pager.addOnPageChangeListener(object :ViewPager.SimpleOnPageChangeListener(){
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                Log.d("scott","position = $position   positionOffset = $positionOffset   positionOffsetPixels = $positionOffsetPixels")
+                //Log.d("scott","position = $position   positionOffset = $positionOffset   positionOffsetPixels = $positionOffsetPixels")
             }
 
             override fun onPageSelected(position: Int) {
@@ -51,6 +51,11 @@ class HomeFragment : BaseFragment() {
                     mPagerAdapter?.pausePlay()
                 }else{
                     mPagerAdapter?.resumePlay()
+                }
+                if(position == 0){
+                    mPagerAdapter?.startPreview()
+                }else{
+                    mPagerAdapter?.stopPreview()
                 }
             }
         })
@@ -117,6 +122,13 @@ class HomeFragment : BaseFragment() {
             feedsFragment.setTabClickCallback(mOnTabClick)
         }
 
+        fun startPreview(){
+            cameraFragment.startPreview();
+        }
+
+        fun stopPreview(){
+            cameraFragment.stopPreview()
+        }
         fun hideInnerBottomNav(){
             feedsFragment.hideInnerBottomNav()
         }
