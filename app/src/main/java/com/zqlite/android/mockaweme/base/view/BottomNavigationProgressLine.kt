@@ -72,7 +72,7 @@ class BottomNavigationProgressLine : View {
         mainHandler.postDelayed(object : Runnable {
             override fun run() {
                 currentProgress +=12
-                if(currentProgress > w/2) currentProgress = w/8
+                if(currentProgress > w/2) currentProgress = 0
                 invalidate()
                 if (!progressDrawing) return
                 mainHandler.postDelayed(this,fps)
@@ -83,6 +83,7 @@ class BottomNavigationProgressLine : View {
 
     fun stopProgress() {
         progressDrawing = false
+        currentProgress = 0
     }
 
     override fun onDraw(canvas: Canvas?) {

@@ -20,4 +20,21 @@ abstract class BaseFragment : Fragment() {
     open fun onHide(){}
 
     open fun onShow(){}
+
+    open fun onAdd(){}
+
+    protected fun hideFragment(fragment:BaseFragment){
+        childFragmentManager.beginTransaction().hide(fragment).commit()
+        fragment.onHide()
+    }
+    protected fun addFragment(containerId:Int,fragment: BaseFragment){
+        childFragmentManager.beginTransaction().add(containerId,fragment).commit()
+        fragment.onAdd()
+    }
+
+    protected fun showFragment(fragment:BaseFragment){
+        childFragmentManager.beginTransaction().show(fragment).commit()
+        fragment.onShow()
+    }
+
 }

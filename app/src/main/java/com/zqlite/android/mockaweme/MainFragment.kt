@@ -22,6 +22,7 @@ import com.zqlite.android.mockaweme.base.BaseFragment
 import com.zqlite.android.mockaweme.base.view.BottomNavigation
 import com.zqlite.android.mockaweme.entity.VideoEntity
 import com.zqlite.android.mockaweme.fragment.feed.FeedsFragment
+import com.zqlite.android.mockaweme.fragment.follow.FollowFragment
 import com.zqlite.android.mockaweme.fragment.home.HomeFragment
 import com.zqlite.android.mockaweme.fragment.profile.ProfileFragment
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -33,10 +34,12 @@ class MainFragment : BaseFragment() {
 
     val mHomeFragment = HomeFragment.getInstance(null)
     val mMeFragment :ProfileFragment
+    private val mFollowFragment:FollowFragment
     init {
         val args = Bundle()
         args.putBoolean("me",true)
         mMeFragment = ProfileFragment.getInstance(args)
+        mFollowFragment = FollowFragment.getInstance(null)
     }
     override fun getLayoutId(): Int {
         return R.layout.fragment_main
@@ -58,9 +61,11 @@ class MainFragment : BaseFragment() {
 
         })
 
-        childFragmentManager.beginTransaction().add(R.id.container,mMeFragment).commit()
+        addFragment(R.id.container,mMeFragment)
         hideFragment(mMeFragment)
-        childFragmentManager.beginTransaction().add(R.id.container,mHomeFragment).commit()
+        addFragment(R.id.container,mFollowFragment)
+        hideFragment(mFollowFragment)
+        addFragment(R.id.container,mHomeFragment)
         mHomeFragment.setOnTabClickCallback(object :BottomNavigation.OnTabClick{
             override fun onTabClick(index: Int) {
                 if(index > 0){
@@ -76,10 +81,17 @@ class MainFragment : BaseFragment() {
                     bottom_navigation.visibility = View.GONE
                     mHomeFragment.showInnerBottomNav()
                     hideFragment(mMeFragment)
+                    hideFragment(mFollowFragment)
                     showFragment(mHomeFragment)
+                }
+                if(index == 1){
+                    hideFragment(mHomeFragment)
+                    hideFragment(mMeFragment)
+                    showFragment(mFollowFragment)
                 }
                 if(index ==3 ){
                     hideFragment(mHomeFragment)
+                    hideFragment(mFollowFragment)
                     showFragment(mMeFragment)
                 }
             }
@@ -87,15 +99,6 @@ class MainFragment : BaseFragment() {
         })
     }
 
-    private fun hideFragment(fragment:BaseFragment){
-        childFragmentManager.beginTransaction().hide(fragment).commit()
-        fragment.onHide()
-    }
-
-    private fun showFragment(fragment:BaseFragment){
-        childFragmentManager.beginTransaction().show(fragment).commit()
-        fragment.onShow()
-    }
     companion object Instance{
         fun getInstance(args:Bundle?): MainFragment {
             val fragment = MainFragment()
