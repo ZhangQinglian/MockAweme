@@ -84,4 +84,7 @@ dependencies {
 
     //runtime permission
     implementation 'com.karumi:dexter:4.2.0'
+
+    //usecase lib
+    implementation 'com.zqlite.android:usecaselib:0.1'
 }
