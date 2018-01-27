@@ -1,6 +1,7 @@
 package com.zqlite.android.mockaweme.fragment.camera
 
 import android.Manifest
+import android.graphics.Rect
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.ImageView
+import android.widget.TextView
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -33,6 +35,8 @@ class CameraFragment : BaseFragment() {
     private var mIsFront = true
     interface Callback{
         fun onBackPress()
+        fun enableViewPager()
+        fun disableViewPager()
     }
 
     override fun getLayoutId(): Int {
@@ -69,12 +73,36 @@ class CameraFragment : BaseFragment() {
         val layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
         filter_list.adapter = adapter
         filter_list.layoutManager = layoutManager
+        filter_list.addItemDecoration(FilterItemDecoration())
+
+        filter.setOnClickListener {
+            filter_area.animate().translationY(0F).setDuration(300).start()
+            hideControllerWidget()
+            mCallback?.disableViewPager()
+        }
+        filter_selector.setOnClickListener {
+            filter_area.animate().translationY(filter_area.height.toFloat()).setDuration(300).start()
+            showControllerWidget()
+            mCallback?.enableViewPager()
+        }
     }
 
     fun setCallback(callback: Callback){
         mCallback = callback
     }
 
+    private fun hideControllerWidget(){
+        les_switch.visibility = View.INVISIBLE
+        back.visibility = View.INVISIBLE
+        shot_button.visibility = View.INVISIBLE
+        filter.visibility = View.INVISIBLE
+    }
+    private fun showControllerWidget(){
+        les_switch.visibility = View.VISIBLE
+        back.visibility = View.VISIBLE
+        shot_button.visibility = View.VISIBLE
+        filter.visibility = View.VISIBLE
+    }
     fun startPreview() {
         Log.d("scott", "start preview ")
         checkPermission()
@@ -130,6 +158,13 @@ class CameraFragment : BaseFragment() {
                 R.drawable.a5r,
                 R.drawable.a5v,
                 R.drawable.a5x,
+                R.drawable.a63,
+                R.drawable.a61,
+                R.drawable.a60,
+                R.drawable.a64,
+                R.drawable.a66,
+                R.drawable.a67,
+                R.drawable.a68,
                 R.drawable.a5h,
                 R.drawable.a5m,
                 R.drawable.a5n,
@@ -138,9 +173,16 @@ class CameraFragment : BaseFragment() {
                 R.drawable.a5u,
                 R.drawable.a5w,
                 R.drawable.a5y,
-                R.drawable.a5z)
+                R.drawable.a5z,
+                R.drawable.a62,
+                R.drawable.a65
+        )
+
+        val nameArrays = resources.getStringArray(R.array.filter_name)
+
+
         override fun onBindViewHolder(holder: FilterItemHolder?, position: Int) {
-            holder!!.update(filterDrawableIds[position])
+            holder!!.update(filterDrawableIds[position],nameArrays[position])
         }
 
         override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): FilterItemHolder {
@@ -156,9 +198,10 @@ class CameraFragment : BaseFragment() {
 
     inner class FilterItemHolder(val view:View) : RecyclerView.ViewHolder(view){
         private var thumb:ImageView = view.findViewById(R.id.thumb)
-
-        fun update(drawableId:Int){
+        private var nameText: TextView = view.findViewById(R.id.name)
+        fun update(drawableId:Int,name:String){
             thumb.setImageResource(drawableId)
+            nameText.setText(name)
         }
     }
 
@@ -169,6 +212,31 @@ class CameraFragment : BaseFragment() {
                 fragment.arguments = args
             }
             return fragment
+        }
+    }
+
+
+    inner class FilterItemDecoration : RecyclerView.ItemDecoration(){
+        override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
+            val position = parent?.getChildAdapterPosition(view)
+            if(position == 0){
+                outRect?.left = 0
+                outRect?.top = 0
+                outRect?.right = 4
+                outRect?.bottom = 0
+            }else{
+                outRect?.left = 4
+                outRect?.top = 0
+                outRect?.right = 4
+                outRect?.bottom = 0
+            }
+            if(position?.plus(1) == parent?.adapter?.itemCount){
+                outRect?.left = 4
+                outRect?.top = 0
+                outRect?.right = 0
+                outRect?.bottom = 0
+            }
+
         }
     }
 }

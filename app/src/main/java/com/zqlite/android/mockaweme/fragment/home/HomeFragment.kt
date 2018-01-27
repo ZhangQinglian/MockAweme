@@ -2,11 +2,13 @@ package com.zqlite.android.mockaweme.fragment.home
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.graphics.Rect
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
+import android.support.v7.widget.RecyclerView
 import android.view.*
 import com.zqlite.android.mockaweme.R
 import com.zqlite.android.mockaweme.base.BaseFragment
@@ -16,6 +18,8 @@ import com.zqlite.android.mockaweme.fragment.feed.FeedsFragment
 import com.zqlite.android.mockaweme.fragment.camera.CameraFragment
 import com.zqlite.android.mockaweme.fragment.profile.ProfileFragment
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.view_mock_playing.*
+
 /**
  * Created by scott on 2018/1/12.
  */
@@ -127,6 +131,14 @@ class HomeFragment : BaseFragment() {
             })
             feedsFragment.setTabClickCallback(mOnTabClick)
             cameraFragment.setCallback(object :CameraFragment.Callback{
+                override fun disableViewPager() {
+                    pager.isScrollable = false
+                }
+
+                override fun enableViewPager() {
+                    pager.isScrollable = true
+                }
+
                 override fun onBackPress() {
                     pager.setCurrentItem(1,true)
                 }
