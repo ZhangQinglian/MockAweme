@@ -3,8 +3,47 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black">
+
     <com.tencent.rtmp.ui.TXCloudVideoView
         android:id="@+id/video_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
+
+    <com.zqlite.android.mockaweme.base.view.CameraShotButton
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp" />
+
+    <ImageView
+        android:id="@+id/filter"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="57dp"
+        android:layout_marginRight="40dp"
+        android:src="@drawable/rp">
+    </ImageView>
+
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ww"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="15dp"/>
+
+    <ImageView
+        android:id="@+id/les_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/tu"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"/>
 </RelativeLayout>

@@ -7,10 +7,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.zqlite.android.mockaweme.R
 import com.zqlite.android.mockaweme.base.BaseFragment
 import com.zqlite.android.mockaweme.base.view.BottomNavigation
@@ -54,8 +51,10 @@ class HomeFragment : BaseFragment() {
                 }
                 if(position == 0){
                     mPagerAdapter?.startPreview()
+                    hideSystemBar()
                 }else{
                     mPagerAdapter?.stopPreview()
+                    showSystemBar()
                 }
             }
         })
@@ -74,6 +73,13 @@ class HomeFragment : BaseFragment() {
     }
     fun showInnerBottomNav(){
         mPagerAdapter!!.showInnerBottomNav()
+    }
+    fun hideSystemBar(){
+        activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+    }
+
+    fun showSystemBar(){
+        activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
     }
     override fun getLayoutId(): Int {
         return R.layout.fragment_home
@@ -120,10 +126,15 @@ class HomeFragment : BaseFragment() {
 
             })
             feedsFragment.setTabClickCallback(mOnTabClick)
+            cameraFragment.setCallback(object :CameraFragment.Callback{
+                override fun onBackPress() {
+                    pager.setCurrentItem(1,true)
+                }
+            })
         }
 
         fun startPreview(){
-            cameraFragment.startPreview();
+            cameraFragment.startPreview()
         }
 
         fun stopPreview(){

@@ -4,9 +4,7 @@ import android.Manifest
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.VideoView
 import com.karumi.dexter.Dexter
-import com.karumi.dexter.DexterBuilder
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
@@ -16,6 +14,7 @@ import com.tencent.ugc.TXRecordCommon
 import com.tencent.ugc.TXUGCRecord
 import com.zqlite.android.mockaweme.R
 import com.zqlite.android.mockaweme.base.BaseFragment
+import kotlinx.android.synthetic.main.fragment_camera.*
 
 /**
  * Created by scott on 2018/1/12.
@@ -24,6 +23,12 @@ class CameraFragment : BaseFragment() {
 
     private var mTXCameraRecord: TXUGCRecord? = null
     private var mVideoView: TXCloudVideoView? = null
+    private var mCallback:Callback?=null
+    private var mIsFront = true
+    interface Callback{
+        fun onBackPress()
+    }
+
     override fun getLayoutId(): Int {
         return R.layout.fragment_camera
     }
@@ -42,8 +47,21 @@ class CameraFragment : BaseFragment() {
 
         })
         mVideoView = view.findViewById(R.id.video_view)
+        Log.d("scott","camera fragment onViewCreated")
+        back.setOnClickListener { mCallback?.onBackPress() }
+        les_switch.setOnClickListener {
+            mIsFront = !mIsFront
+            if(mIsFront){
+                les_switch.setImageResource(R.drawable.tu)
+            }else{
+                les_switch.setImageResource(R.drawable.a95)
+            }
+            mTXCameraRecord!!.switchCamera(mIsFront)
+        }
+    }
 
-
+    fun setCallback(callback: Callback){
+        mCallback = callback
     }
 
     fun startPreview() {
@@ -63,8 +81,6 @@ class CameraFragment : BaseFragment() {
                         Manifest.permission.RECORD_AUDIO
                 ).withListener(object : MultiplePermissionsListener {
             override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                //Log.d("scott", "granted permissions : " + report?.grantedPermissionResponses)
-                //Log.d("scott", "denied permissions : " + report?.deniedPermissionResponses)
                 if(report?.grantedPermissionResponses?.size == 3){
                     startPreviewInner()
                 }
