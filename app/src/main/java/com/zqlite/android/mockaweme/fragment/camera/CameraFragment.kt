@@ -2,8 +2,14 @@ package com.zqlite.android.mockaweme.fragment.camera
 
 import android.Manifest
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.ImageView
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -58,6 +64,11 @@ class CameraFragment : BaseFragment() {
             }
             mTXCameraRecord!!.switchCamera(mIsFront)
         }
+
+        val adapter = FilterAdapter()
+        val layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
+        filter_list.adapter = adapter
+        filter_list.layoutManager = layoutManager
     }
 
     fun setCallback(callback: Callback){
@@ -100,6 +111,55 @@ class CameraFragment : BaseFragment() {
         param.maxDuration = 60000    //视频录制的最大时长ms
         mTXCameraRecord!!.setBeautyDepth(5,5,5,5)
         mTXCameraRecord!!.startCameraSimplePreview(param, mVideoView!!)
+    }
+
+    inner class FilterAdapter : RecyclerView.Adapter<FilterItemHolder>(){
+
+        private val filterDrawableIds = arrayListOf(
+                R.drawable.a5d,
+                R.drawable.a5e,
+                R.drawable.a5f,
+                R.drawable.a5g,
+                R.drawable.a5i,
+                R.drawable.a5j,
+                R.drawable.a5k,
+                R.drawable.a5l,
+                R.drawable.a5q,
+                R.drawable.a5p,
+                R.drawable.a5s,
+                R.drawable.a5r,
+                R.drawable.a5v,
+                R.drawable.a5x,
+                R.drawable.a5h,
+                R.drawable.a5m,
+                R.drawable.a5n,
+                R.drawable.a5o,
+                R.drawable.a5t,
+                R.drawable.a5u,
+                R.drawable.a5w,
+                R.drawable.a5y,
+                R.drawable.a5z)
+        override fun onBindViewHolder(holder: FilterItemHolder?, position: Int) {
+            holder!!.update(filterDrawableIds[position])
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): FilterItemHolder {
+            val view =  LayoutInflater.from(context).inflate(R.layout.listitem_filter_item,parent,false)
+            return FilterItemHolder(view)
+        }
+
+        override fun getItemCount(): Int {
+            return filterDrawableIds.size
+        }
+
+    }
+
+    inner class FilterItemHolder(val view:View) : RecyclerView.ViewHolder(view){
+        private var thumb:ImageView = view.findViewById(R.id.thumb)
+
+        fun update(drawableId:Int){
+            thumb.setImageResource(drawableId)
+        }
     }
 
     companion object Instance {
