@@ -32,6 +32,7 @@ import kotlinx.android.synthetic.main.fragment_main.*
 class MainFragment : BaseFragment() {
 
 
+
     val mHomeFragment = HomeFragment.getInstance(null)
     val mMeFragment :ProfileFragment
     private val mFollowFragment:FollowFragment
@@ -97,6 +98,10 @@ class MainFragment : BaseFragment() {
             }
 
         })
+    }
+
+    override fun onBackPress(): Boolean {
+        return mHomeFragment.onBackPress()
     }
 
     companion object Instance{

@@ -1,6 +1,7 @@
 package com.zqlite.android.mockaweme.fragment.camera
 
 import android.Manifest
+import android.graphics.Camera
 import android.graphics.Rect
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -17,11 +18,13 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.tencent.rtmp.TXLiveConstants
 import com.tencent.rtmp.ui.TXCloudVideoView
 import com.tencent.ugc.TXRecordCommon
 import com.tencent.ugc.TXUGCRecord
 import com.zqlite.android.mockaweme.R
 import com.zqlite.android.mockaweme.base.BaseFragment
+import com.zqlite.android.mockaweme.base.view.CameraShotButton
 import kotlinx.android.synthetic.main.fragment_camera.*
 
 /**
@@ -56,6 +59,8 @@ class CameraFragment : BaseFragment() {
             }
 
         })
+        mTXCameraRecord?.setBeautyStyle(TXLiveConstants.BEAUTY_STYLE_SMOOTH)
+
         mVideoView = view.findViewById(R.id.video_view)
         Log.d("scott","camera fragment onViewCreated")
         back.setOnClickListener { mCallback?.onBackPress() }
@@ -85,12 +90,27 @@ class CameraFragment : BaseFragment() {
             showControllerWidget()
             mCallback?.enableViewPager()
         }
+
+        shot_button.setCallback(object :CameraShotButton.Callback{
+            override fun onPress() {
+                hideAllExceptCameraShot()
+            }
+
+            override fun onRelease() {
+            }
+
+        })
     }
 
     fun setCallback(callback: Callback){
         mCallback = callback
     }
 
+    private fun hideAllExceptCameraShot(){
+        les_switch.visibility = View.INVISIBLE
+        back.visibility = View.INVISIBLE
+        filter.visibility = View.INVISIBLE
+    }
     private fun hideControllerWidget(){
         les_switch.visibility = View.INVISIBLE
         back.visibility = View.INVISIBLE

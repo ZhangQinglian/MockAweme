@@ -2,13 +2,11 @@ package com.zqlite.android.mockaweme.fragment.home
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.graphics.Rect
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
-import android.support.v7.widget.RecyclerView
 import android.view.*
 import com.zqlite.android.mockaweme.R
 import com.zqlite.android.mockaweme.base.BaseFragment
@@ -18,7 +16,6 @@ import com.zqlite.android.mockaweme.fragment.feed.FeedsFragment
 import com.zqlite.android.mockaweme.fragment.camera.CameraFragment
 import com.zqlite.android.mockaweme.fragment.profile.ProfileFragment
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.view_mock_playing.*
 
 /**
  * Created by scott on 2018/1/12.
@@ -26,11 +23,11 @@ import kotlinx.android.synthetic.main.view_mock_playing.*
 class HomeFragment : BaseFragment() {
 
 
-    private var mPagerAdapter : HomePagerAdapter? = null
-    private var mViewModel : HomeViewModel? = null
-    private var mFeedsFragmentCallback : FeedsFragment.Callback? = null
-    private var mOnTabClick : BottomNavigation.OnTabClick? = null
-    fun setFeedsFragmentCallback(callback:FeedsFragment.Callback){
+    private var mPagerAdapter: HomePagerAdapter? = null
+    private var mViewModel: HomeViewModel? = null
+    private var mFeedsFragmentCallback: FeedsFragment.Callback? = null
+    private var mOnTabClick: BottomNavigation.OnTabClick? = null
+    fun setFeedsFragmentCallback(callback: FeedsFragment.Callback) {
         mFeedsFragmentCallback = callback
     }
 
@@ -42,21 +39,21 @@ class HomeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         pager.adapter = mPagerAdapter
         pager.currentItem = 1
-        pager.addOnPageChangeListener(object :ViewPager.SimpleOnPageChangeListener(){
+        pager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
                 //Log.d("scott","position = $position   positionOffset = $positionOffset   positionOffsetPixels = $positionOffsetPixels")
             }
 
             override fun onPageSelected(position: Int) {
-                if(position != 1){
+                if (position != 1) {
                     mPagerAdapter?.pausePlay()
-                }else{
+                } else {
                     mPagerAdapter?.resumePlay()
                 }
-                if(position == 0){
+                if (position == 0) {
                     mPagerAdapter?.startPreview()
                     hideSystemBar()
-                }else{
+                } else {
                     mPagerAdapter?.stopPreview()
                     showSystemBar()
                 }
@@ -68,26 +65,30 @@ class HomeFragment : BaseFragment() {
         })
     }
 
-    fun setOnTabClickCallback(callback:BottomNavigation.OnTabClick?){
+    fun setOnTabClickCallback(callback: BottomNavigation.OnTabClick?) {
         mOnTabClick = callback
     }
 
-    fun hideInnerBottomNav(){
+    fun hideInnerBottomNav() {
         mPagerAdapter!!.hideInnerBottomNav()
     }
-    fun showInnerBottomNav(){
+
+    fun showInnerBottomNav() {
         mPagerAdapter!!.showInnerBottomNav()
     }
-    fun hideSystemBar(){
+
+    fun hideSystemBar() {
         activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
     }
 
-    fun showSystemBar(){
+    fun showSystemBar() {
         activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
     }
+
     override fun getLayoutId(): Int {
         return R.layout.fragment_home
     }
+
     override fun onHide() {
         mPagerAdapter?.pausePlay()
     }
@@ -95,27 +96,38 @@ class HomeFragment : BaseFragment() {
     override fun onShow() {
         mPagerAdapter?.resumePlay()
     }
-    companion object Instance{
-        fun getInstance(args:Bundle?):HomeFragment{
+
+    override fun onBackPress(): Boolean {
+        return if (pager.currentItem != 1) {
+            pager.setCurrentItem(1, true)
+            true
+        } else {
+            false
+        }
+    }
+
+    companion object Instance {
+        fun getInstance(args: Bundle?): HomeFragment {
             val fragment = HomeFragment()
-            if(args != null){
+            if (args != null) {
                 fragment.arguments = args
             }
             return fragment
         }
     }
 
-    inner class HomePagerAdapter(fm:FragmentManager) : FragmentPagerAdapter(fm){
+    inner class HomePagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
-        private val fragments : MutableList<Fragment> = mutableListOf()
+        private val fragments: MutableList<Fragment> = mutableListOf()
         private val feedsFragment = FeedsFragment.getInstance(null)
         private val cameraFragment = CameraFragment.getInstance(null)
         private val profileFragment = ProfileFragment.getInstance(null)
+
         init {
             fragments.add(cameraFragment)
             fragments.add(feedsFragment)
             fragments.add(profileFragment)
-            feedsFragment.setCallback(object :FeedsFragment.Callback{
+            feedsFragment.setCallback(object : FeedsFragment.Callback {
                 override fun videoSelected(videoEntity: VideoEntity) {
                     profileFragment.updateVideoEntity(videoEntity)
                 }
@@ -130,7 +142,7 @@ class HomeFragment : BaseFragment() {
 
             })
             feedsFragment.setTabClickCallback(mOnTabClick)
-            cameraFragment.setCallback(object :CameraFragment.Callback{
+            cameraFragment.setCallback(object : CameraFragment.Callback {
                 override fun disableViewPager() {
                     pager.isScrollable = false
                 }
@@ -140,30 +152,35 @@ class HomeFragment : BaseFragment() {
                 }
 
                 override fun onBackPress() {
-                    pager.setCurrentItem(1,true)
+                    pager.setCurrentItem(1, true)
                 }
             })
         }
 
-        fun startPreview(){
+        fun startPreview() {
             cameraFragment.startPreview()
         }
 
-        fun stopPreview(){
+        fun stopPreview() {
             cameraFragment.stopPreview()
         }
-        fun hideInnerBottomNav(){
+
+        fun hideInnerBottomNav() {
             feedsFragment.hideInnerBottomNav()
         }
-        fun showInnerBottomNav(){
+
+        fun showInnerBottomNav() {
             feedsFragment.showInnerBottomNav()
         }
-        fun pausePlay(){
+
+        fun pausePlay() {
             feedsFragment.pause()
         }
-        fun resumePlay(){
+
+        fun resumePlay() {
             feedsFragment.resumePlay()
         }
+
         override fun getItem(position: Int): Fragment {
             return fragments[position]
         }

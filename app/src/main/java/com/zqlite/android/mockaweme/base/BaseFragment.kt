@@ -17,6 +17,10 @@ abstract class BaseFragment : Fragment() {
 
     abstract fun getLayoutId():Int
 
+    open fun onBackPress():Boolean{
+        return false
+    }
+
     open fun onHide(){}
 
     open fun onShow(){}
