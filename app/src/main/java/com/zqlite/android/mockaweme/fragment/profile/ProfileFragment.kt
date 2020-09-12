@@ -60,8 +60,8 @@ class ProfileFragment : BaseFragment() {
         val args = arguments
         if(args != null){
             if(args["me"] as Boolean){
-                Glide.with(context!!).load("http://p2c5nlwg0.bkt.clouddn.com/my_avatar.png").into(avatar)
-                Glide.with(context!!).load("http://p2c5nlwg0.bkt.clouddn.com/my_avatar.png").into(big_avatar)
+                Glide.with(context!!).load("http://cdn.zqlxtt.cn/zhouxingchi.jpeg").into(avatar)
+                Glide.with(context!!).load("http://cdn.zqlxtt.cn/zhouxingchi.jpeg").into(big_avatar)
                 follow.visibility = View.GONE
             }
         }else{
